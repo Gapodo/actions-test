@@ -1,0 +1,82 @@
+{
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
+    "files.insertFinalNewline": true,
+    "todohighlight.isEnable": true,
+    "todohighlight.isCaseSensitive": true,
+    "todohighlight.keywords": [
+        {
+            // Use styles of custom todo instead of default
+            "text": "FIXME",
+            "color": "#fff",
+            "backgroundColor": "#f06292",
+            "overviewRulerColor": "#f06292"
+        },
+        {
+            // Use styles of custom todo instead of default
+            "text": "TODO:",
+            "color": "#000000",
+            "backgroundColor": "#1E88E5",
+            "overviewRulerColor": "#1E88E5"
+        },
+        {
+            "text": "TODO",
+            "color": "#000000",
+            "backgroundColor": "#1E88E5",
+            "overviewRulerColor": "#1E88E5"
+        },
+        {
+            "text": "BUG",
+            "color": "#000000",
+            "backgroundColor": "#E53935",
+            "overviewRulerColor": "#E53935"
+        },
+        {
+            "text": "HACK",
+            "color": "#000000",
+            "backgroundColor": "#F57C00",
+            "overviewRulerColor": "#F57C00"
+        },
+        {
+            "text": "REVIEW",
+            "color": "#000000",
+            "backgroundColor": "#8BC34A",
+            "overviewRulerColor": "#8BC34A"
+        },
+        {
+            "text": "NOTE",
+            "color": "#000000",
+            "backgroundColor": "#CFD8DC",
+            "overviewRulerColor": "#BDBDBD"
+        }
+    ],
+    "todohighlight.defaultStyle": {
+        "color": "#000000",
+        "backgroundColor": "#00BCD4",
+        "overviewRulerColor": "#00BCD4"
+    },
+    "todohighlight.include": [
+        "**/*.js",
+        "**/*.html",
+        "**/*.php",
+        "**/*.css"
+    ],
+    "todohighlight.exclude": [
+        "**∕node_modules∕**",
+        "**∕bower_components∕**",
+        "**∕dist∕**",
+        "**/_output/**",
+        "**/*.min.*",
+        "**/*.map"
+    ],
+    "cSpell.words": [
+        "Anja",
+        "Atlassian",
+        "Craazy",
+        "Gapodo",
+        "Kanban",
+        "Trello"
+    ],
+    "cSpell.language": "en,de-DE"
+}
