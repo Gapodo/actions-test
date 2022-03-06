@@ -1,0 +1,30 @@
+# Some basic stuff
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# OS-Files
+
+# macOS-crap
+.DS_Store
+.ds_store
+_NCrunch*
+
+# M$-crap
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# temp & lock-files
+*~
+~$*
+.~lick.*
+~*.tmp
+.Trash-*
+
