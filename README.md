@@ -6,6 +6,6 @@ An app to help motivate people to improve their recycling behaviour, allowing fo
 
 * Anja Paulitsch [@CrazyTRex007](https://github.com/CraazyTRex007)
 * Michael Amann [@Gapodo](https://github.com/Gapodo)
-* Matthias Lichtenegger
+* Matthias Lichtenegger [@mli2140](https://github.com/mli2140)
 * Cengizhan Aydin
 
