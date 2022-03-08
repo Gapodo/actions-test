@@ -1,0 +1,82 @@
+@startuml "Domain Model"
+Object "user" as u {
+  name
+  description
+  exp
+  account
+  sessions
+}
+
+Object "account" as acc
+
+Object "self managed account" as smacc {
+  email
+  password
+}
+
+Object "federated Account" as facc {
+  supportId
+  foreignId
+}
+
+acc <|-- smacc
+acc <|-- facc
+
+
+Object "expEvent" as ee {
+  task
+  date
+}
+
+Object item {
+
+}
+
+Object "guilde" as g {
+  name
+  description
+  exp
+  members
+}
+
+Object "blog post" as bp {
+  author
+  title
+  date
+  updatedDate
+  comments
+}
+
+Object "blog comment" as bc {
+  author
+  date
+  content
+}
+
+Object "guilde chat" as gc {
+  guilde
+  messages
+}
+
+Object "chat message" as cm {
+  author
+  date
+  message
+}
+
+Object session
+
+Object task
+
+u *-- acc
+u *-- ee
+
+bp::comments *-- "0..*" bc
+
+
+bc::author --> u
+bp::author --> u
+
+g "1" o-- "1..*" u
+
+@enduml
