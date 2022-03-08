@@ -78,5 +78,13 @@
         "Kanban",
         "Trello"
     ],
-    "cSpell.language": "en,de-DE"
+    "cSpell.language": "en,de-DE",
+    "plantuml.exportFormat": "svg",
+    "plantuml.exportOutDir": "docs/puml-images",
+    "plantuml.previewAutoUpdate": true,
+    "plantuml.render": "PlantUMLServer",
+    "plantuml.server": "http://www.plantuml.com/plantuml",
+    "plantuml.includepaths": [
+        "docs/design"
+    ]
 }
