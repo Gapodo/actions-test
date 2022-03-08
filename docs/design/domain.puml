@@ -1,38 +1,60 @@
 @startuml "Domain Model"
+
 Object "user" as u {
   name
   description
+  location
   exp
   account
   sessions
+  guildRank
+  ' TODO is abstracting the account helpful? (could improve GDRP compliant deletion)
 }
 
-Object "account" as acc
+Object "account" as acc {
+    supportId
+}
 
-Object "self managed account" as smacc {
+Object "self managed account" as accsm {
   email
   password
 }
 
-Object "federated Account" as facc {
-  supportId
+Object "federated Account" as accf {
   foreignId
+  ' TODO more precise info once the federation mechanism is set
 }
 
-acc <|-- smacc
-acc <|-- facc
+acc <|-- accsm
+acc <|-- accf
 
+Object "user session" as us {
+    ' TODO which info do we need to manage sessions?
+}
 
-Object "expEvent" as ee {
+Object "task experience event" as tee {
   task
+  user
   date
 }
 
-Object item {
-
+Object "item" as i {
+  ean
+  materials
+  verified
 }
 
-Object "guilde" as g {
+Object "materialType" as mt {
+    name
+    recyclingInfo
+}
+
+Object "recyclingInfo" as ri {
+    region
+    whatToDo
+}
+
+Object "guild" as g {
   name
   description
   exp
@@ -41,7 +63,7 @@ Object "guilde" as g {
 
 Object "blog post" as bp {
   author
-  title
+  blogTitle
   date
   updatedDate
   comments
@@ -53,30 +75,62 @@ Object "blog comment" as bc {
   content
 }
 
-Object "guilde chat" as gc {
-  guilde
+Object "guild chat" as gc {
+  guild
   messages
 }
 
-Object "chat message" as cm {
+Object "guild chat message" as gcm {
   author
   date
   message
 }
 
-Object session
+Object "task" as t {
+    name
+    exp
+}
 
-Object task
+Object "reduction" as r {
+    name
+    description
+    co2
+    water
+    exp
+}
 
-u *-- acc
-u *-- ee
+Object "reduction exp event" as ree {
+    user
+    date
+    reduction
+}
 
-bp::comments *-- "0..*" bc
+Object "admin" as ad {
+    ' TODO what would the full version be?
+}
+
+u "1" *-- "1" acc
+u "1" *-- "*" tee::user
+u "1" *-- "*" us
+g "1" *-- "1" gc
+u *-- ree::user
+gc "1" *-- "1" gcm
+
+bp::comments "1" *-- "*" bc
+
+ri o-- mt::recyclingInfo
 
 
-bc::author --> u
-bp::author --> u
+u "1" o-- "1" bc::author
+u "1" o-- "1" bp::author
+u "1" o-- "1" gcm::author
+
 
 g "1" o-- "1..*" u
+
+i::materials "*" o-- "*" mt
+
+ree::reduction --> r
+tee::task --> t
 
 @enduml
