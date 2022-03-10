@@ -1,14 +1,19 @@
 @startuml "Domain Model"
 
+left to right direction
+'top to bottom direction
+
+'skinparam linetype polyline
+'skinparam linetype ortho
+
 Object "user" as u {
-  name
-  description
-  location
-  exp
-  account
-  sessions
-  guildRank
-  ' TODO is abstracting the account helpful? (could improve GDRP compliant deletion)
+    name
+    description
+    location
+    exp
+    guildRank
+    //guild//
+    //account//
 }
 
 Object "account" as acc {
@@ -16,37 +21,33 @@ Object "account" as acc {
 }
 
 Object "self managed account" as accsm {
-  email
-  password
+    email
+    password
 }
 
 Object "federated Account" as accf {
   foreignId
-  ' TODO more precise info once the federation mechanism is set
 }
 
 acc <|-- accsm
 acc <|-- accf
 
 Object "user session" as us {
-    ' TODO which info do we need to manage sessions?
-}
-
-Object "task experience event" as tee {
-  task
-  user
-  date
+    //user//
+    token
+    expires
 }
 
 Object "item" as i {
-  ean
-  materials
-  verified
+    ean
+    //materials//
+    //reduction//
+    verified
 }
 
 Object "materialType" as mt {
     name
-    recyclingInfo
+    //recyclingInfo//
 }
 
 Object "recyclingInfo" as ri {
@@ -54,41 +55,70 @@ Object "recyclingInfo" as ri {
     whatToDo
 }
 
-Object "guild" as g {
-  name
-  description
-  exp
-  members
-}
-
 Object "blog post" as bp {
-  author
-  blogTitle
-  date
-  updatedDate
-  comments
+    //author//
+    blogTitle
+    date
+    updatedDate
+    //comments//
 }
 
-Object "blog comment" as bc {
-  author
-  date
-  content
+Object "blogComment" as bc {
+    //author//
+    //blog//
+    date
+    content
 }
 
-Object "guild chat" as gc {
-  guild
-  messages
+Object "guild" as g {
+    name
+    description
+    exp
+    //chatMessages//
+    //members//
 }
 
 Object "guild chat message" as gcm {
-  author
-  date
-  message
+    //author//
+    //guild//
+    date
+    message
 }
 
-Object "task" as t {
+Object "challenge base" as cb {
     name
+    desciption
+    daily-available
+    daily-amount
+    monthly-available
+    monthly-amount
+    guilde-available
+    guild-amount
+    guild-multiplyer
     exp
+}
+
+Object "challenge" as c {
+    //challengeBase//
+    startDate
+    endDate
+    type
+}
+
+Object "user challenge experience event" as ucee {
+    //user//
+    //challenge//
+    counter
+    status
+    date
+}
+
+Object "guild challenge experience event" as gcee {
+    //guild//
+    //challenge//
+    counter
+    status
+    date
 }
 
 Object "reduction" as r {
@@ -96,41 +126,56 @@ Object "reduction" as r {
     description
     co2
     water
+    trashWeight
     exp
 }
 
 Object "reduction exp event" as ree {
-    user
+    //user//
     date
-    reduction
+    //reduction//
 }
 
-Object "admin" as ad {
-    ' TODO what would the full version be?
+Object "comparison values" as cv {
+    type
+    value
 }
 
-u "1" *-- "1" acc
-u "1" *-- "*" tee::user
-u "1" *-- "*" us
-g "1" *-- "1" gc
-u *-- ree::user
-gc "1" *-- "1" gcm
+acc::account "1" *-- "1" u : "identified via"
 
-bp::comments "1" *-- "*" bc
+u "1" *-- "*" us::user : "issued by"
 
-ri o-- mt::recyclingInfo
+' User Challenge
+c "1" *-- "*" ucee::challenge : "realizes"
+u "1" *-- "*" ucee::user : "triggered by"
 
+' Reduction
+r "1" *-- "*" ree::reduction : "realizes"
+u "1" *-- "*" ree::user : "triggered by"
 
-u "1" o-- "1" bc::author
-u "1" o-- "1" bp::author
-u "1" o-- "1" gcm::author
+' Recycling & reduction
+ri "*" o-- "*" mt::recyclingInfo : "explained by"
+r "0..1" o-- "*" i : "recycling saves"
 
-
-g "1" o-- "1..*" u
-
+' Scan/Info
 i::materials "*" o-- "*" mt
 
-ree::reduction --> r
-tee::task --> t
+' ChatMessage
+g "1" *- "1" gcm : "sent to"
+u "1" o-- "1" gcm::author : "written by"
+
+' Blog
+u "1" o-- "1" bc::author : "written by"
+u "1" o-- "1" bp::author : "written by"
+bp::comments "1" *-- "*" bc : "discusses"
+
+' Guild
+g "1" o--- "1..*" u::guild : "supports"
+
+g "1" *-- "*" gcee::guild : "triggers"
+c "1" *-- "*" gcee::challenge : "described by"
+
+' Challenge base
+cb "1" *-- "*" c::challengeBase : "based on"
 
 @enduml
