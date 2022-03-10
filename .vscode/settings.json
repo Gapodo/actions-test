@@ -86,5 +86,8 @@
     "plantuml.server": "http://www.plantuml.com/plantuml",
     "plantuml.includepaths": [
         "docs/design"
+    ],
+    "cSpell.enableFiletypes": [
+        "plantuml"
     ]
 }
