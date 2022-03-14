@@ -13,9 +13,9 @@ jobs:
       - name: fetch plantuml
         run: curl -o plantuml.jar https://iweb.dl.sourceforge.net/project/plantuml/plantuml.jar
       - name: Process Diagrams
-        run: java -jar plantuml.jar -v -tsvg -r -o "${{ github.workspace }}/docs/puml-images" "${{ github.workspace }}/docs/**.pu"
+        run: java -jar plantuml.jar -v -tsvg -r -o "${{ github.workspace }}/docs/puml-images" "docs/**.pu"
       - name: Display Diagrams
-        run: pwd && ls output
+        run: pwd && ls "docs/puml-images"
       - name: Commit Diagrams
         run: |
           git config --local user.email "action@github.com"
