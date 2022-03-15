@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="136px" preserveAspectRatio="none" style="width:737px;height:136px;background:#000000;" version="1.1" viewBox="0 0 737 136" width="737px" zoomAndPan="magnify"><defs/><g><rect fill="#080D15" height="1" style="stroke:#080D15;stroke-width:1.0;" width="1" x="0" y="0"/><text fill="#33FF02" font-family="sans-serif" font-size="12" font-style="italic" font-weight="bold" lengthAdjust="spacing" textLength="127" x="5" y="17">PlantUML 1.2022.2</text><rect fill="#33FF02" height="21.2969" style="stroke:#33FF02;stroke-width:1.0;" width="224" x="5" y="26.9688"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="222" x="6" y="41.9688">[From domain.puml (line 3) ]</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="62.2656"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="208" x="5" y="78.5625">@startuml "Domain Model"</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="5" x="5" y="94.8594"> </text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" text-decoration="wavy underline" textLength="206" x="5" y="111.1563">!pragma graphviz_dot jdot</text><text fill="#FF0000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="720" x="10" y="127.4531">This directive has been renamed to '!pragma layout smetana'. Please update your diagram.</text><!--MD5=[4647e89b380a19e62e4fb32f924e7e76]
+@startuml "Domain Model"
+
+!pragma graphviz_dot jdot
+
+left to right direction
+'top to bottom direction
+
+'skinparam linetype polyline
+'skinparam linetype ortho
+
+Object "user" as u {
+    name
+    description
+    location
+    exp
+    guildRank
+    //guild//
+    //account//
+}
+
+Object "account" as acc {
+    supportId
+}
+
+Object "self managed account" as accsm {
+    email
+    password
+}
+
+Object "federated Account" as accf {
+  foreignId
+}
+
+acc <|- - accsm
+acc <|- - accf
+
+Object "user session" as us {
+    //user//
+    token
+    expires
+}
+
+Object "item" as i {
+    ean
+    //materials//
+    //reduction//
+    verified
+}
+
+Object "materialType" as mt {
+    name
+    //recyclingInfo//
+}
+
+Object "recyclingInfo" as ri {
+    region
+    whatToDo
+}
+
+Object "blog post" as bp {
+    //author//
+    blogTitle
+    date
+    updatedDate
+    //comments//
+}
+
+Object "blogComment" as bc {
+    //author//
+    //blog//
+    date
+    content
+}
+
+Object "guild" as g {
+    name
+    description
+    exp
+    //chatMessages//
+    //members//
+}
+
+Object "guild chat message" as gcm {
+    //author//
+    //guild//
+    date
+    message
+}
+
+Object "challenge base" as cb {
+    name
+    desciption
+    daily-available
+    daily-amount
+    monthly-available
+    monthly-amount
+    guilde-available
+    guild-amount
+    guild-multiplyer
+    exp
+}
+
+Object "challenge" as c {
+    //challengeBase//
+    startDate
+    endDate
+    type
+}
+
+Object "user challenge experience event" as ucee {
+    //user//
+    //challenge//
+    counter
+    status
+    date
+}
+
+Object "guild challenge experience event" as gcee {
+    //guild//
+    //challenge//
+    counter
+    status
+    date
+}
+
+Object "reduction" as r {
+    name
+    description
+    co2
+    water
+    trashWeight
+    exp
+}
+
+Object "reduction exp event" as ree {
+    //user//
+    date
+    //reduction//
+}
+
+Object "comparison values" as cv {
+    type
+    value
+}
+
+acc::account "1" *- - "1" u : "identified via"
+
+u "1" *- - "*" us::user : "issued by"
+
+' User Challenge
+c "1" *- - "*" ucee::challenge : "realizes"
+u "1" *- - "*" ucee::user : "triggered by"
+
+' Reduction
+r "1" *- - "*" ree::reduction : "realizes"
+u "1" *- - "*" ree::user : "triggered by"
+
+' Recycling & reduction
+ri "*" o- - "*" mt::recyclingInfo : "explained by"
+r "0..1" o- - "*" i : "recycling saves"
+
+' Scan/Info
+i::materials "*" o- - "*" mt
+
+' ChatMessage
+g "1" *- "1" gcm : "sent to"
+u "1" o- - "1" gcm::author : "written by"
+
+' Blog
+u "1" o- - "1" bc::author : "written by"
+u "1" o- - "1" bp::author : "written by"
+bp::comments "1" *- - "*" bc : "discusses"
+
+' Guild
+g "1" o- - - "1..*" u::guild : "supports"
+
+g "1" *- - "*" gcee::guild : "triggers"
+c "1" *- - "*" gcee::challenge : "described by"
+
+' Challenge base
+cb "1" *- - "*" c::challengeBase : "based on"
+
+@enduml
+
+@startuml "Domain Model"
+
+!pragma graphviz_dot jdot
+
+left to right direction
+
+
+Object "user" as u {
+    name
+    description
+    location
+    exp
+    guildRank
+    //guild//
+    //account//
+}
+
+Object "account" as acc {
+    supportId
+}
+
+Object "self managed account" as accsm {
+    email
+    password
+}
+
+Object "federated Account" as accf {
+  foreignId
+}
+
+acc <|- - accsm
+acc <|- - accf
+
+Object "user session" as us {
+    //user//
+    token
+    expires
+}
+
+Object "item" as i {
+    ean
+    //materials//
+    //reduction//
+    verified
+}
+
+Object "materialType" as mt {
+    name
+    //recyclingInfo//
+}
+
+Object "recyclingInfo" as ri {
+    region
+    whatToDo
+}
+
+Object "blog post" as bp {
+    //author//
+    blogTitle
+    date
+    updatedDate
+    //comments//
+}
+
+Object "blogComment" as bc {
+    //author//
+    //blog//
+    date
+    content
+}
+
+Object "guild" as g {
+    name
+    description
+    exp
+    //chatMessages//
+    //members//
+}
+
+Object "guild chat message" as gcm {
+    //author//
+    //guild//
+    date
+    message
+}
+
+Object "challenge base" as cb {
+    name
+    desciption
+    daily-available
+    daily-amount
+    monthly-available
+    monthly-amount
+    guilde-available
+    guild-amount
+    guild-multiplyer
+    exp
+}
+
+Object "challenge" as c {
+    //challengeBase//
+    startDate
+    endDate
+    type
+}
+
+Object "user challenge experience event" as ucee {
+    //user//
+    //challenge//
+    counter
+    status
+    date
+}
+
+Object "guild challenge experience event" as gcee {
+    //guild//
+    //challenge//
+    counter
+    status
+    date
+}
+
+Object "reduction" as r {
+    name
+    description
+    co2
+    water
+    trashWeight
+    exp
+}
+
+Object "reduction exp event" as ree {
+    //user//
+    date
+    //reduction//
+}
+
+Object "comparison values" as cv {
+    type
+    value
+}
+
+acc::account "1" *- - "1" u : "identified via"
+
+u "1" *- - "*" us::user : "issued by"
+
+c "1" *- - "*" ucee::challenge : "realizes"
+u "1" *- - "*" ucee::user : "triggered by"
+
+r "1" *- - "*" ree::reduction : "realizes"
+u "1" *- - "*" ree::user : "triggered by"
+
+ri "*" o- - "*" mt::recyclingInfo : "explained by"
+r "0..1" o- - "*" i : "recycling saves"
+
+i::materials "*" o- - "*" mt
+
+g "1" *- "1" gcm : "sent to"
+u "1" o- - "1" gcm::author : "written by"
+
+u "1" o- - "1" bc::author : "written by"
+u "1" o- - "1" bp::author : "written by"
+bp::comments "1" *- - "*" bc : "discusses"
+
+g "1" o- - - "1..*" u::guild : "supports"
+
+g "1" *- - "*" gcee::guild : "triggers"
+c "1" *- - "*" gcee::challenge : "described by"
+
+cb "1" *- - "*" c::challengeBase : "based on"
+
+@enduml
+
+PlantUML version 1.2022.2(Sat Mar 05 16:30:19 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
