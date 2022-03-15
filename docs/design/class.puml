@@ -1,6 +1,6 @@
 @startuml ER
 
-!pragma graphviz_dot jdot
+!pragma layout smetana
 
 !include ./domain.puml
 
