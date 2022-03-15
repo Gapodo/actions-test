@@ -1,5 +1,7 @@
 @startuml "Domain Model"
 
+!pragma graphviz_dot jdot
+
 left to right direction
 'top to bottom direction
 

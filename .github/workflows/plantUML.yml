@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     name: plantuml
     steps:
-      - name: Install Dependencies
-        run: |
-          sudo apt-get install --no-install-recommends graphviz
+      # - name: Install Dependencies
+      #   run: |
+      #     sudo apt-get install --no-install-recommends graphviz
       - name: Checkout Repository
         uses: actions/checkout@v3
       - name: fetch plantuml

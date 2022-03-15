@@ -1,4 +1,7 @@
 @startuml ER
+
+!pragma graphviz_dot jdot
+
 !include ./domain.puml
 
 abstract class AbstractList
