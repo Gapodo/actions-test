@@ -17,6 +17,7 @@ AbstractList <|-- gcm
 class ArrayList {
   Object[] elementData
   size()
+  someChange()
 }
 
 enum TimeUnit {
