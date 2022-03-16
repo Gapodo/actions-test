@@ -12,16 +12,56 @@ jobs:
           sudo apt-get install --no-install-recommends graphviz
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: cleanup Diagrams
         run: find "${{ github.workspace }}/docs/puml-images" -type f -name "*.svg" -delete
+      - name: Get changed UML files
+        id: getfilenewupdated
+        run: |
+          git diff-tree -r --no-commit-id --summary ${{ github.sha }} \
+          | awk -F' ' '{
+            # ensure we are not trying to process deleted files
+            # only process puml files
+            # do not try to process our theme or custom config
+            if ( $1 !~ /^delete$/ && $4 ~ /\.puml$/)
+            {
+              # only print the file name and strip newlines for spaces
+              printf "::set-output name=files::" "%s ", $4
+            }
+          }
+          END { print "" } # ensure we do print a newline at the end
+          '
+      - name: UML files considered echo output
+        run: |
+          echo ${{ steps.getfilenewupdated.outputs.files }}
       - name: fetch plantuml
         run: curl -o plantuml.jar https://iweb.dl.sourceforge.net/project/plantuml/plantuml.jar
       - name: Process Diagrams
-        run: java -jar plantuml.jar -v -tsvg -r -o "${{ github.workspace }}/docs/puml-images" "docs/**.puml" || exit 0
-      #- name: Process Diagrams (smetana, cheaper...)
-      #  run:  java -jar plantuml.jar -v -tsvg -r -Playout=smetana -o "${{ github.workspace }}/docs/puml-images" "docs/**.puml" || exit 0
+        run: java -jar plantuml.jar -v -tsvg -r -o "${{ github.workspace }}/docs/puml-images" ${{ steps.getfilenewupdated.outputs.files }} || exit 0
       - name: remove plantuml jar
         run: rm plantuml.jar
+      - name: Get deleted UML files
+        id: getfiledeleted
+        run: |
+          git diff-tree -r --no-commit-id --summary ${{ github.sha }} \
+          | awk -F' ' '{
+            # ensure we are not trying to process deleted files
+            # only process puml files
+            # do not try to process our theme or custom config
+            if ( $1 =~ /^delete$/ && $4 ~ /\.puml$/ )
+            {
+              # only print the file name and strip newlines for spaces
+              printf "::set-output name=files::" "%s ", $4
+            }
+          }
+          END { print "" } # ensure we do print a newline at the end
+          '
+      - name: UML files considered for deletion echo output
+        run: |
+          echo ${{ steps.getfiledeleted.outputs.files }}
+      - name: Remove deleted UML renders
+        run: echo ${{ steps.getfiledeleted.outputs.files }} | sed 's/\.puml/\.svg/g' | rev | cut -d'/' -f1 | rev
       - name: Display Diagrams
         run: pwd && ls -la ./*
       - name: Commit Diagrams
