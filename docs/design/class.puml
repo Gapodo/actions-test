@@ -1,6 +1,6 @@
 @startuml ER
 
-!include ./domain.puml
+'!include ./domain.puml
 
 abstract class AbstractList
 abstract AbstractCollection
