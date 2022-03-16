@@ -1,7 +1,4 @@
 @startuml "Domain Model"
-
-!pragma layout smetana
-
 left to right direction
 'top to bottom direction
 

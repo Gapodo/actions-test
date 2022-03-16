@@ -1,7 +1,5 @@
 @startuml ER
 
-!pragma layout smetana
-
 !include ./domain.puml
 
 abstract class AbstractList
@@ -14,7 +12,7 @@ Collection <|-- AbstractCollection
 
 Collection <|- List
 AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
+AbstractList <|-- gcm
 
 class ArrayList {
   Object[] elementData

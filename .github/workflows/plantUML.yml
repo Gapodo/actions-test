@@ -5,15 +5,21 @@ jobs:
     runs-on: ubuntu-latest
     name: plantuml
     steps:
-      # - name: Install Dependencies
-      #   run: |
-      #     sudo apt-get install --no-install-recommends graphviz
+      - name: get env
+        run: env
+      - name: Install Dependencies
+        run: |
+          sudo apt-get install --no-install-recommends graphviz
       - name: Checkout Repository
         uses: actions/checkout@v3
+      - name: cleanup Diagrams
+        run: find "${{ github.workspace }}/docs/puml-images" -type f -name "*.svg" -delete
       - name: fetch plantuml
         run: curl -o plantuml.jar https://iweb.dl.sourceforge.net/project/plantuml/plantuml.jar
       - name: Process Diagrams
         run: java -jar plantuml.jar -v -tsvg -r -o "${{ github.workspace }}/docs/puml-images" "docs/**.puml" || exit 0
+      #- name: Process Diagrams (smetana, cheaper...)
+      #  run:  java -jar plantuml.jar -v -tsvg -r -Playout=smetana -o "${{ github.workspace }}/docs/puml-images" "docs/**.puml" || exit 0
       - name: remove plantuml jar
         run: rm plantuml.jar
       - name: Display Diagrams
