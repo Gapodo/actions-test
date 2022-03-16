@@ -24,7 +24,7 @@ jobs:
             # ensure we are not trying to process deleted files
             # only process puml files
             # do not try to process our theme or custom config
-            if ( $1 !~ /^delete$/ && $4 ~ /\.puml$/)
+            if ( $1 !~ /^delete$/ && $4 ~ /\.puml$/ && $4 !~ /(theme|config)\.puml$/)
             {
               # only print the file name and strip newlines for spaces
               printf "::set-output name=files::" "%s ", $4
@@ -46,10 +46,10 @@ jobs:
         run: |
           git diff-tree -r --no-commit-id --summary ${{ github.sha }} \
           | awk -F' ' '{
-            # ensure we are not trying to process deleted files
+            # ensure we are only processing deleted files
             # only process puml files
             # do not try to process our theme or custom config
-            if ( $1 =~ /^delete$/ && $4 ~ /\.puml$/ )
+            if ( $1 ~ /^delete$/ && $4 ~ /\.puml$/ && $4 !~ /(theme|config)\.puml$/ )
             {
               # only print the file name and strip newlines for spaces
               printf "::set-output name=files::" "%s ", $4
@@ -61,17 +61,17 @@ jobs:
         run: |
           echo ${{ steps.getfiledeleted.outputs.files }}
       - name: Remove deleted UML renders
-        run: echo ${{ steps.getfiledeleted.outputs.files }} | sed 's/\.puml/\.svg/g' | rev | cut -d'/' -f1 | rev
+        run: echo ${{ steps.getfiledeleted.outputs.files }} | sed 's/\.puml/\.svg/g'
       - name: Display Diagrams
         run: pwd && ls -la ./*
-      - name: Commit Diagrams
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          git commit -m ":rocket: adding generated diagrams" || exit 0
-      - name: Push Diagrams
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+      # - name: Commit Diagrams
+      #   run: |
+      #     git config --local user.email "action@github.com"
+      #     git config --local user.name "GitHub Action"
+      #     git add .
+      #     git commit -m ":rocket: adding generated diagrams" || exit 0
+      # - name: Push Diagrams
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
